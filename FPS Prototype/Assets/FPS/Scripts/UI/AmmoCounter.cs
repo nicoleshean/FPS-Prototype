@@ -52,7 +52,7 @@ namespace Unity.FPS.UI
 
         void OnAmmoPickup(AmmoPickupEvent evt)
         {
-            if (evt.Weapon == m_Weapon)
+            if (evt.Weapon == m_Weapon) //checks if ammo matches current weapon
             {
                 BulletCounter.text = m_Weapon.GetCarriedPhysicalBullets().ToString();
             }

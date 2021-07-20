@@ -2,7 +2,7 @@
 
 namespace Unity.FPS.Game
 {
-    public class Damageable : MonoBehaviour
+    public class Damageable : MonoBehaviour //inflicts damage on objects
     {
         [Tooltip("Multiplier to apply to the received damage")]
         public float DamageMultiplier = 1f;

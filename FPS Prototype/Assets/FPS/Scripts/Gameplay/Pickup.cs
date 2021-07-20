@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Unity.FPS.Gameplay
 {
     [RequireComponent(typeof(Rigidbody), typeof(Collider))]
-    public class Pickup : MonoBehaviour
+    public class Pickup : MonoBehaviour //creates pickup items
     {
         [Tooltip("Frequency at which the item will move up and down")]
         public float VerticalBobFrequency = 1f;

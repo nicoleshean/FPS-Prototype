@@ -21,7 +21,7 @@ namespace Unity.FPS.Game
             InheritedMuzzleVelocity = controller.MuzzleWorldVelocity;
             InitialCharge = controller.CurrentCharge;
 
-            OnShoot?.Invoke();
+            OnShoot?.Invoke(); //invokes all functions under onshoot delegate (projectiles)
         }
     }
 }

@@ -25,7 +25,7 @@ namespace Unity.FPS.Game
 
         protected virtual void Start()
         {
-            OnObjectiveCreated?.Invoke(this);
+            OnObjectiveCreated?.Invoke(this); //when objectives are created, invoke the OnObjectiveCreated delegate
 
             DisplayMessageEvent displayMessage = Events.DisplayMessageEvent;
             displayMessage.Message = Title;
@@ -56,7 +56,7 @@ namespace Unity.FPS.Game
             evt.IsComplete = IsCompleted;
             EventManager.Broadcast(evt);
 
-            OnObjectiveCompleted?.Invoke(this);
+            OnObjectiveCompleted?.Invoke(this); //when objectives are completed, invoke the OnObjectiveCompleted delegate
         }
     }
 }

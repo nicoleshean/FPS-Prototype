@@ -23,8 +23,8 @@ namespace Unity.FPS.UI
 
             EventManager.AddListener<ObjectiveUpdateEvent>(OnUpdateObjective);
 
-            Objective.OnObjectiveCreated += RegisterObjective;
-            Objective.OnObjectiveCompleted += UnregisterObjective;
+            Objective.OnObjectiveCreated += RegisterObjective; //adds RegisterObjective function to delegate
+            Objective.OnObjectiveCompleted += UnregisterObjective; //adds UnregisterObjective function to delegate
         }
 
         public void RegisterObjective(Objective objective)

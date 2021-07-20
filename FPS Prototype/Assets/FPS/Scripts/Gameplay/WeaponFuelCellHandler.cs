@@ -27,10 +27,10 @@ namespace Unity.FPS.Gameplay
             DebugUtility.HandleErrorIfNullGetComponent<WeaponController, WeaponFuelCellHandler>(m_Weapon, this,
                 gameObject);
 
-            m_FuelCellsCooled = new bool[FuelCells.Length];
+            m_FuelCellsCooled = new bool[FuelCells.Length]; //creates boolean array containing all the cells
             for (int i = 0; i < m_FuelCellsCooled.Length; i++)
             {
-                m_FuelCellsCooled[i] = true;
+                m_FuelCellsCooled[i] = true; //sets all cells to cool at start
             }
         }
 

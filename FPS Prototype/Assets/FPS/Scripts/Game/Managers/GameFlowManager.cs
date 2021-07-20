@@ -19,6 +19,7 @@ namespace Unity.FPS.Game
 
         [Tooltip("Win game message")]
         public string WinGameMessage;
+
         [Tooltip("Duration of delay before the win message")]
         public float DelayBeforeWinMessage = 2f;
 

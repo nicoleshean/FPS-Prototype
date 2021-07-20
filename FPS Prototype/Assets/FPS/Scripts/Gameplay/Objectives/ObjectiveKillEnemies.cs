@@ -34,9 +34,9 @@ namespace Unity.FPS.Gameplay
         void OnEnemyKilled(EnemyKillEvent evt)
         {
             if (IsCompleted)
-                return;
+                return; //if kill objective is complete, do nothing
 
-            m_KillTotal++;
+            m_KillTotal++; 
 
             if (MustKillAllEnemies)
                 KillsToCompleteObjective = evt.RemainingEnemyCount + m_KillTotal;
