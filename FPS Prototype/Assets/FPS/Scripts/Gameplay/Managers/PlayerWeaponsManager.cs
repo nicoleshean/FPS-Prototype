@@ -147,8 +147,16 @@ namespace Unity.FPS.Gameplay
                 // Handle accumulating recoil
                 if (hasFired)
                 {
-                    m_AccumulatedRecoil += Vector3.back * activeWeapon.RecoilForce;
-                    m_AccumulatedRecoil = Vector3.ClampMagnitude(m_AccumulatedRecoil, MaxRecoilDistance);
+                    if (activeWeapon.Recoil == true)
+                    {
+                        m_AccumulatedRecoil += Vector3.back * activeWeapon.RecoilForce;
+                        m_AccumulatedRecoil = Vector3.ClampMagnitude(m_AccumulatedRecoil, MaxRecoilDistance);
+                    }
+                    else if (activeWeapon.Recoil == false)
+                    {
+                        m_AccumulatedRecoil += Vector3.forward * activeWeapon.RecoilForce;
+                        m_AccumulatedRecoil = Vector3.ClampMagnitude(m_AccumulatedRecoil, MaxRecoilDistance);
+                    }
                 }
             }
 
@@ -343,8 +351,14 @@ namespace Unity.FPS.Gameplay
         // Updates the weapon recoil animation
         void UpdateWeaponRecoil()
         {
+            WeaponController activeWeapon = GetActiveWeapon();
             // if the accumulated recoil is further away from the current position, make the current position move towards the recoil target
-            if (m_WeaponRecoilLocalPosition.z >= m_AccumulatedRecoil.z * 0.99f)
+            if (m_WeaponRecoilLocalPosition.z >= m_AccumulatedRecoil.z * 0.99f && activeWeapon.Recoil == true)
+            {
+                m_WeaponRecoilLocalPosition = Vector3.Lerp(m_WeaponRecoilLocalPosition, m_AccumulatedRecoil,
+                    RecoilSharpness * Time.deltaTime);
+            }
+            else if (m_WeaponRecoilLocalPosition.z <= m_AccumulatedRecoil.z * 0.99f && activeWeapon.Recoil == false)
             {
                 m_WeaponRecoilLocalPosition = Vector3.Lerp(m_WeaponRecoilLocalPosition, m_AccumulatedRecoil,
                     RecoilSharpness * Time.deltaTime);

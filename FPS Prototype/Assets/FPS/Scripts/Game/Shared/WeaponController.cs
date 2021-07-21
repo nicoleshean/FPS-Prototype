@@ -12,6 +12,12 @@ namespace Unity.FPS.Game
         Charge,
     }
 
+    public enum WeaponRecoilType
+    {
+        Recoil,
+        Lunge,
+    }
+
     [System.Serializable]
     public struct CrosshairData
     {
@@ -60,6 +66,9 @@ namespace Unity.FPS.Game
 
         [Tooltip("Amount of bullets per shot")]
         public int BulletsPerShot = 1;
+
+        [Tooltip("Whether the weapon has recoil or lunges forward")]
+        public WeaponRecoilType RecoilType;
 
         [Tooltip("Force that will push back the weapon after each shot")] [Range(0f, 2f)]
         public float RecoilForce = 1;
@@ -157,6 +166,7 @@ namespace Unity.FPS.Game
         AudioSource m_ShootAudioSource;
 
         public bool IsReloading { get; private set; }
+        public bool Recoil { get; private set; }
 
         const string k_AnimAttackParameter = "Attack";
 
@@ -192,6 +202,17 @@ namespace Unity.FPS.Game
                     shell.SetActive(false);
                     m_PhysicalAmmoPool.Enqueue(shell.GetComponent<Rigidbody>());
                 }
+            }
+
+            switch (RecoilType)
+            {
+                case WeaponRecoilType.Recoil:
+                    Recoil = true;
+                    break;
+
+                case WeaponRecoilType.Lunge:
+                    Recoil = false;
+                    break;
             }
         }
 
