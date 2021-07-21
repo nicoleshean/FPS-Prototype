@@ -73,6 +73,9 @@ namespace Unity.FPS.Game
         [Tooltip("Force that will push back the weapon after each shot")] [Range(0f, 2f)]
         public float RecoilForce = 1;
 
+        [Tooltip("Can the player aim with this weapon")]
+        public bool AllowADS = true;
+
         [Tooltip("Ratio of the default FOV that this weapon applies while aiming")] [Range(0f, 1f)]
         public float AimZoomRatio = 1f;
 
@@ -168,6 +171,8 @@ namespace Unity.FPS.Game
         public bool IsReloading { get; private set; }
         public bool Recoil { get; private set; }
 
+        public bool CanAim { get; private set; }
+
         const string k_AnimAttackParameter = "Attack";
 
         private Queue<Rigidbody> m_PhysicalAmmoPool;
@@ -213,6 +218,15 @@ namespace Unity.FPS.Game
                 case WeaponRecoilType.Lunge:
                     Recoil = false;
                     break;
+            }
+
+            if (AllowADS)
+            {
+                CanAim = true;
+            }
+            else
+            {
+                CanAim = false;
             }
         }
 

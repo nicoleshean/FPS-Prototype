@@ -48,14 +48,24 @@ namespace Unity.FPS.Gameplay
         public float AimingBobAmount = 0.02f;
 
         [Header("Weapon Recoil")]
-        [Tooltip("This will affect how fast the recoil moves the weapon, the bigger the value, the fastest")]
+        [Tooltip("This will affect how fast the recoil moves the weapon, the bigger the value, the faster the recoil")]
         public float RecoilSharpness = 50f;
 
         [Tooltip("Maximum distance the recoil can affect the weapon")]
         public float MaxRecoilDistance = 0.5f;
 
-        [Tooltip("How fast the weapon goes back to it's original position after the recoil is finished")]
+        [Tooltip("How fast the weapon goes back to its original position after the recoil is finished")]
         public float RecoilRestitutionSharpness = 10f;
+
+        [Header("Weapon Lunge")]
+        [Tooltip("This will affect how fast the lunge moves the weapon, the bigger the value, the faster the lunge")]
+        public float LungeSharpness = 50f;
+
+        [Tooltip("Maximum distance the lunge can affect the weapon")]
+        public float MaxLungeDistance = 1f;
+
+        [Tooltip("How fast the weapon goes back to its original position after the lunge is finished")]
+        public float LungeRestitutionSharpness = 10f;
 
         [Header("Misc")] [Tooltip("Speed at which the aiming animatoin is played")]
         public float AimingAnimationSpeed = 10f;
@@ -136,7 +146,10 @@ namespace Unity.FPS.Gameplay
                     return;
                 }
                 // handle aiming down sights
-                IsAiming = m_InputHandler.GetAimInputHeld();
+                if (activeWeapon.CanAim) //checks if weapon allows ADS
+                {
+                    IsAiming = m_InputHandler.GetAimInputHeld();
+                }
 
                 // handle shooting
                 bool hasFired = activeWeapon.HandleShootInputs(
@@ -155,7 +168,7 @@ namespace Unity.FPS.Gameplay
                     else if (activeWeapon.Recoil == false)
                     {
                         m_AccumulatedRecoil += Vector3.forward * activeWeapon.RecoilForce;
-                        m_AccumulatedRecoil = Vector3.ClampMagnitude(m_AccumulatedRecoil, MaxRecoilDistance);
+                        m_AccumulatedRecoil = Vector3.ClampMagnitude(m_AccumulatedRecoil, MaxLungeDistance);
                     }
                 }
             }
@@ -361,13 +374,22 @@ namespace Unity.FPS.Gameplay
             else if (m_WeaponRecoilLocalPosition.z <= m_AccumulatedRecoil.z * 0.99f && activeWeapon.Recoil == false)
             {
                 m_WeaponRecoilLocalPosition = Vector3.Lerp(m_WeaponRecoilLocalPosition, m_AccumulatedRecoil,
-                    RecoilSharpness * Time.deltaTime);
+                    LungeSharpness * Time.deltaTime);
             }
             // otherwise, move recoil position to make it recover towards its resting pose
             else
             {
-                m_WeaponRecoilLocalPosition = Vector3.Lerp(m_WeaponRecoilLocalPosition, Vector3.zero,
+                if (activeWeapon.Recoil == true)
+                {
+                    m_WeaponRecoilLocalPosition = Vector3.Lerp(m_WeaponRecoilLocalPosition, Vector3.zero,
                     RecoilRestitutionSharpness * Time.deltaTime);
+                }
+                else if (activeWeapon.Recoil == false)
+                {
+                    m_WeaponRecoilLocalPosition = Vector3.Lerp(m_WeaponRecoilLocalPosition, Vector3.zero,
+                    LungeRestitutionSharpness * Time.deltaTime);
+                }
+                    
                 m_AccumulatedRecoil = m_WeaponRecoilLocalPosition;
             }
         }
