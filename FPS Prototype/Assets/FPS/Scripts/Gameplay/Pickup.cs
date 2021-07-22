@@ -17,6 +17,7 @@ namespace Unity.FPS.Gameplay
         [Tooltip("Sound played on pickup")] public AudioClip PickupSfx;
         [Tooltip("VFX spawned on pickup")] public GameObject PickupVfxPrefab;
 
+
         public Rigidbody PickupRigidbody { get; private set; }
 
         Collider m_Collider;

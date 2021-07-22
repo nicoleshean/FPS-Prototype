@@ -8,6 +8,7 @@ namespace Unity.FPS.Gameplay
         [Header("Parameters")] [Tooltip("Amount of health to heal on pickup")]
         public float HealAmount;
 
+
         protected override void OnPicked(PlayerCharacterController player)
         {
             Health playerHealth = player.GetComponent<Health>();

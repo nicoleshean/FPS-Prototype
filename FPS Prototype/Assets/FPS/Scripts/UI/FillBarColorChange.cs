@@ -19,13 +19,20 @@ namespace Unity.FPS.UI
         [Tooltip("Flash background color when empty")]
         public Color DefaultBackgroundColor;
 
-        [Tooltip("Sharpness for the color change")]
+        [Tooltip("Sharpness for the empty color change")]
         public Color FlashBackgroundColorEmpty;
+
+        [Tooltip("Sharpness for the low color change")]
+        public Color FlashBackgroundColorLow;
 
         [Header("Values")] [Tooltip("Value to consider full")]
         public float FullValue = 1f;
 
-        [Tooltip("Value to consider empty")] public float EmptyValue = 0f;
+        [Tooltip("Value to consider low")]
+        public float LowValue = 0.2f;
+
+        [Tooltip("Value to consider empty")]
+        public float EmptyValue = 0f;
 
         [Tooltip("Sharpness for the color change")]
         public float ColorChangeSharpness = 5f;
@@ -42,13 +49,17 @@ namespace Unity.FPS.UI
 
         public void UpdateVisual(float currentRatio)
         {
-            if (currentRatio == FullValue && currentRatio != m_PreviousValue)
+            if (currentRatio == FullValue && currentRatio != m_PreviousValue) 
             {
-                ForegroundImage.color = FlashForegroundColorFull;
+                ForegroundImage.color = FlashForegroundColorFull; //refills bar white
+            }
+            else if (currentRatio < LowValue && currentRatio >= EmptyValue)
+            {
+                BackgroundImage.color = FlashBackgroundColorLow;
             }
             else if (currentRatio < EmptyValue)
             {
-                BackgroundImage.color = FlashBackgroundColorEmpty;
+                BackgroundImage.color = FlashBackgroundColorEmpty; //turns bar red
             }
             else
             {
