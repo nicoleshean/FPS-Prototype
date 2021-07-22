@@ -73,6 +73,7 @@ namespace Unity.FPS.Game
                 Instantiate(LootPrefab, transform.position, Quaternion.identity);
             }
             var vfx = Instantiate(DestroyVfx, DestroyVfxSpawnPoint.position, Quaternion.identity);
+            AudioUtility.CreateSFX(DestroySound, transform.position, AudioUtility.AudioGroups.DamageTick, 1f);
             // this will call the OnDestroy function
             Destroy(gameObject);
         }

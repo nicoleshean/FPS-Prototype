@@ -1512,6 +1512,10 @@ PrefabInstance:
       objectReference: {fileID: 9114302251155428648, guid: 9ece032c799294749bbc3a5893605d91,
         type: 3}
     - target: {fileID: 1382123286, guid: 07e109acdc1cd0f4daf3d6ea9522142c, type: 3}
+      propertyPath: DestroySound
+      value: 
+      objectReference: {fileID: 8300000, guid: 958408b32ccf3714ea02821877b0870c, type: 3}
+    - target: {fileID: 1382123286, guid: 07e109acdc1cd0f4daf3d6ea9522142c, type: 3}
       propertyPath: DestroyVfxSpawnPoint
       value: 
       objectReference: {fileID: 1210024723}

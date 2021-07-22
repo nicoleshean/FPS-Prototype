@@ -26,7 +26,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e27364eefd6dd0341ba72a3bfc0d9727, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 100
+  MaxHealth: 50
   CriticalHealthRatio: 0.3
 --- !u!114 &1382123286
 MonoBehaviour:
@@ -47,7 +47,7 @@ MonoBehaviour:
     type: 3}
   DestroyVfxSpawnPoint: {fileID: 8036342021495269043}
   DamageTick: {fileID: 0}
-  DestroySound: {fileID: 0}
+  DestroySound: {fileID: 8300000, guid: 958408b32ccf3714ea02821877b0870c, type: 3}
 --- !u!1001 &8037127672339511743
 PrefabInstance:
   m_ObjectHideFlags: 0
