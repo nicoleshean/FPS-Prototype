@@ -170,8 +170,8 @@ namespace Unity.FPS.Game
 
         public bool IsReloading { get; private set; }
         public bool Recoil { get; private set; }
-
         public bool CanAim { get; private set; }
+        public bool IsAmmoFull { get; private set; }
 
         const string k_AnimAttackParameter = "Attack";
 
@@ -273,12 +273,14 @@ namespace Unity.FPS.Game
             UpdateAmmo();
             UpdateCharge();
             UpdateContinuousShootSound();
+            IsAmmoFull = m_CurrentAmmo == MaxAmmo; //sets IsAmmoFull to true if current ammo matches max ammo
 
             if (Time.deltaTime > 0)
             {
                 MuzzleWorldVelocity = (WeaponMuzzle.position - m_LastMuzzlePosition) / Time.deltaTime;
                 m_LastMuzzlePosition = WeaponMuzzle.position;
             }
+
         }
 
         void UpdateAmmo()
