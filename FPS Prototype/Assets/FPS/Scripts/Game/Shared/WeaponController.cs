@@ -83,10 +83,10 @@ namespace Unity.FPS.Game
         public Vector3 AimOffset;
 
         [Header("Ammo Parameters")]
-        [Tooltip("Should the player manually reload")]
+        [Tooltip("Should the player manually reload?")]
         public bool AutomaticReload = true;
-        [Tooltip("Has physical clip on the weapon and ammo shells are ejected when firing")]
-        public bool HasPhysicalBullets = false;
+        //[Tooltip("Has physical clip on the weapon and ammo shells are ejected when firing")]
+        //public bool HasPhysicalBullets = false;
         [Tooltip("Number of bullets in a clip")]
         public int ClipSize = 30;
         [Tooltip("Bullet Shell Casing")]
@@ -197,17 +197,17 @@ namespace Unity.FPS.Game
                 m_ContinuousShootAudioSource.loop = true;
             }
 
-            if (HasPhysicalBullets)
-            {
-                m_PhysicalAmmoPool = new Queue<Rigidbody>(ShellPoolSize);
+            //if (HasPhysicalBullets)
+            //{
+            //    m_PhysicalAmmoPool = new Queue<Rigidbody>(ShellPoolSize);
 
-                for (int i = 0; i < ShellPoolSize; i++)
-                {
-                    GameObject shell = Instantiate(ShellCasing, transform);
-                    shell.SetActive(false);
-                    m_PhysicalAmmoPool.Enqueue(shell.GetComponent<Rigidbody>());
-                }
-            }
+            //    for (int i = 0; i < ShellPoolSize; i++)
+            //    {
+            //        GameObject shell = Instantiate(ShellCasing, transform);
+            //        shell.SetActive(false);
+            //        m_PhysicalAmmoPool.Enqueue(shell.GetComponent<Rigidbody>());
+            //    }
+            //}
 
             switch (RecoilType)
             {
@@ -306,6 +306,13 @@ namespace Unity.FPS.Game
             {
                 CurrentAmmoRatio = m_CurrentAmmo / MaxAmmo;
             }
+        }
+
+        public void AddAmmo(int ammo) //adds ammo from Ammo Pickup
+        {
+            m_CurrentAmmo += ammo;
+
+            m_CurrentAmmo = Mathf.Clamp(m_CurrentAmmo, 0, MaxAmmo);
         }
 
         void UpdateCharge()
@@ -500,11 +507,11 @@ namespace Unity.FPS.Game
                 Destroy(muzzleFlashInstance, 2f);
             }
 
-            if (HasPhysicalBullets)
-            {
-                ShootShell();
-                m_CarriedPhysicalBullets--;
-            }
+            //if (HasPhysicalBullets)
+            //{
+            //    ShootShell();
+            //    m_CarriedPhysicalBullets--;
+            //}
 
             m_LastTimeShot = Time.time;
 

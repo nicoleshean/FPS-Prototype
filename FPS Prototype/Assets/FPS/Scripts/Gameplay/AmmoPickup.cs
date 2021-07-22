@@ -19,7 +19,9 @@ namespace Unity.FPS.Gameplay
                 WeaponController weapon = playerWeaponsManager.HasWeapon(Weapon); //checks if player is already holding that weapon type in inventory
                 if (weapon != null)
                 {
-                    weapon.AddCarriablePhysicalBullets(BulletCount);
+                    //weapon.AddCarriablePhysicalBullets(BulletCount);
+
+                    weapon.AddAmmo(BulletCount); //adds BulletCount to current ammo
 
                     AmmoPickupEvent evt = Events.AmmoPickupEvent;
                     evt.Weapon = weapon;

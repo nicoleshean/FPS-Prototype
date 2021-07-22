@@ -63,10 +63,10 @@ namespace Unity.FPS.UI
             m_Weapon = weapon;
             WeaponCounterIndex = weaponIndex;
             WeaponImage.sprite = weapon.WeaponIcon;
-            if (!weapon.HasPhysicalBullets)
-                BulletCounter.transform.parent.gameObject.SetActive(false);
-            else
-                BulletCounter.text = weapon.GetCarriedPhysicalBullets().ToString();
+            //if (!weapon.HasPhysicalBullets)
+            BulletCounter.transform.parent.gameObject.SetActive(false);
+            //else
+                //BulletCounter.text = weapon.GetCarriedPhysicalBullets().ToString();
 
             m_PlayerWeaponsManager = FindObjectOfType<PlayerWeaponsManager>();
             DebugUtility.HandleErrorIfNullFindObject<PlayerWeaponsManager, AmmoCounter>(m_PlayerWeaponsManager, this);
