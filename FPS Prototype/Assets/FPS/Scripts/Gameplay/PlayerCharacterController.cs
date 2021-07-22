@@ -83,20 +83,26 @@ namespace Unity.FPS.Gameplay
         public AudioClip FallDamageSfx;
 
         [Header("Fall Damage")]
-        [Tooltip("Whether the player will recieve damage when hitting the ground at high speed")]
-        public bool RecievesFallDamage;
+        [Tooltip("Whether the player will receive damage when hitting the ground at high speed")]
+        public bool ReceivesFallDamage;
 
-        [Tooltip("Minimum fall speed for recieving fall damage")]
-        public float MinSpeedForFallDamage = 10f;
+        [Tooltip("Minimum height the player must fall from to take fall damage")]
+        public int DamageThreshold = 6;
 
-        [Tooltip("Fall speed for recieving the maximum amount of fall damage")]
-        public float MaxSpeedForFallDamage = 30f;
+        [Tooltip("Damage multiplier after falling")]
+        public int DamageMultiplier = 10;
 
-        [Tooltip("Damage recieved when falling at the mimimum speed")]
-        public float FallDamageAtMinSpeed = 10f;
+        //[Tooltip("Minimum fall speed for recieving fall damage")]
+        //public float MinSpeedForFallDamage = 10f;
 
-        [Tooltip("Damage recieved when falling at the maximum speed")]
-        public float FallDamageAtMaxSpeed = 50f;
+        //[Tooltip("Fall speed for recieving the maximum amount of fall damage")]
+        //public float MaxSpeedForFallDamage = 30f;
+
+        //[Tooltip("Damage recieved when falling at the mimimum speed")]
+        //public float FallDamageAtMinSpeed = 10f;
+
+        //[Tooltip("Damage recieved when falling at the maximum speed")]
+        //public float FallDamageAtMaxSpeed = 50f;
         #endregion 
 
         public UnityAction<bool> OnStanceChanged;
@@ -132,9 +138,14 @@ namespace Unity.FPS.Gameplay
         float m_CameraVerticalAngle = 0f;
         float m_FootstepDistanceCounter;
         float m_TargetCharacterHeight;
+        bool m_startFalling;
+        bool m_inflictDamage;
 
         const float k_JumpGroundingPreventionTime = 0.2f;
         const float k_GroundCheckDistanceInAir = 0.07f;
+
+        public float startYPos;
+        public float endYPos;
 
         void Awake()
         {
@@ -175,37 +186,78 @@ namespace Unity.FPS.Gameplay
 
         void Update()
         {
+            
+
             // check for Y kill
             if (!IsDead && transform.position.y < KillHeight)
             {
                 m_Health.Kill(); //immediately sets health to 0, then calls OnDie delegate
             }
 
-            HasJumpedThisFrame = false; 
+            HasJumpedThisFrame = false;
+
+            //Debug.Log(startYPos);
 
             bool wasGrounded = IsGrounded;
+
+            if (!IsGrounded)
+            {
+                if (gameObject.transform.position.y > startYPos)
+                {
+                    m_startFalling = true;
+                }
+                if (m_startFalling)
+                {
+                    startYPos = gameObject.transform.position.y;
+                    m_startFalling = false;
+                    m_inflictDamage = true;
+                }
+            }
+
+
             GroundCheck();
 
-            // landing
-            if (IsGrounded && !wasGrounded)
-            {
-                // Fall damage
-                float fallSpeed = -Mathf.Min(CharacterVelocity.y, m_LatestImpactSpeed.y);
-                float fallSpeedRatio = (fallSpeed - MinSpeedForFallDamage) /
-                                       (MaxSpeedForFallDamage - MinSpeedForFallDamage);
-                if (RecievesFallDamage && fallSpeedRatio > 0f) //if fall damage is turned on
-                {
-                    float dmgFromFall = Mathf.Lerp(FallDamageAtMinSpeed, FallDamageAtMaxSpeed, fallSpeedRatio);
-                    m_Health.TakeDamage(dmgFromFall, null);
 
-                    // fall damage SFX
-                    AudioSource.PlayOneShot(FallDamageSfx);
+            // landing
+            if (IsGrounded && !wasGrounded) //if now grounded after not being grounded before
+            {
+                endYPos = gameObject.transform.position.y;
+
+                // Height Fall damage
+                if (startYPos - endYPos > DamageThreshold)
+                {
+                    if (m_inflictDamage)
+                    {
+                        
+                        int dmgFromFall = Mathf.RoundToInt((startYPos - endYPos - DamageThreshold) * DamageMultiplier);
+                        m_Health.TakeDamage(dmgFromFall, null);
+                        AudioSource.PlayOneShot(FallDamageSfx);
+                        m_inflictDamage = false;
+                        m_startFalling = true;
+                    }
                 }
                 else
                 {
-                    // land SFX
                     AudioSource.PlayOneShot(LandSfx);
                 }
+
+                // Speed Fall damage
+                //float fallSpeed = -Mathf.Min(CharacterVelocity.y, m_LatestImpactSpeed.y);
+                //float fallSpeedRatio = (fallSpeed - MinSpeedForFallDamage) /
+                //                      (MaxSpeedForFallDamage - MinSpeedForFallDamage);
+                //if (ReceivesFallDamage && fallSpeedRatio > 0f) //if fall damage is turned on
+                //{
+                //    float dmgFromFall = Mathf.Lerp(FallDamageAtMinSpeed, FallDamageAtMaxSpeed, fallSpeedRatio);
+                //    m_Health.TakeDamage(dmgFromFall, null);
+
+                //    // fall damage SFX
+                //    AudioSource.PlayOneShot(FallDamageSfx);
+                //}
+                //else
+                //{
+                //    // land SFX
+                //    AudioSource.PlayOneShot(LandSfx);
+                //}
             }
 
             // crouching
